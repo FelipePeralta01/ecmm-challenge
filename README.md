@@ -98,27 +98,27 @@ de la prueba. Una vez vencido ese plazo, no se recibirán nuevas entregas.
 
 Para levantar la aplicación se necesitan dos terminales: una para el backend y otra para el frontend.
 
-#### 1. Backend (Django)
+## 1. Backend (Django)
 
-# Instalar dependencias del proyecto
+### Instalar dependencias del proyecto
 uv sync
 
-# Correr migraciones
+### Correr migraciones
 uv run python manage.py migrate
 
-# Ejecutar los tests unitarios
+### Ejecutar los tests unitarios
 uv run python manage.py test tests
 
-# Levantar la API
+### Levantar la API
 uv run python manage.py runserver
 
 
-#### 2. Frontend (Next.js)
+## 2. Frontend (Next.js)
 
-# Instalar paquetes
+### Instalar paquetes
 npm install
 
-# Iniciar en modo desarrollo
+### Iniciar en modo desarrollo
 npm run dev
 
 ---
@@ -131,6 +131,7 @@ npm run dev
 - **Modelos y tipos de datos:** Para el precio usé `DecimalField` en lugar de `FloatField` para evitar errores de redondeo que suelen ocurrir con números flotantes cuando se maneja dinero. Las validaciones de valores mayores o iguales a cero las reforcé tanto en el modelo (`MinValueValidator`) como en el serializer para devolver errores 400 descriptivos al cliente.
 - **Frontend con TanStack Query y TypeScript:** Decidí usar Next.js con TypeScript para tener tipado estricto en los modelos de producto y respuestas de la API. Incorporé TanStack Query (`@tanstack/react-query`) porque simplifica mucho el manejo de estados asíncronos (loading, error) y permite refrescar automáticamente la grilla al crear o eliminar un producto mediante la invalidación de queries.
 - **Mejoras pendientes:** Me gustaría agregar paginación en el backend (pensando en catálogos grandes), notificaciones tipo *toast* en la UI para confirmar acciones de guardado, y una suite de pruebas frontend usando Vitest o React Testing Library.
+- **Como limitación:** No se permite eliminar una categoría que tenga productos asociados, ya que existe una relación entre ambas entidades y borrar la categoría dejaría productos apuntando a una referencia inexistente. Esta decisión mantiene la integridad de los datos y evita inconsistencias en el catálogo. Como mejora a esta limitación, se podría ocultar la categoría creando una columna nueva como tipo boolean para evitar eliminarla de la BD.
 
 ---
 
