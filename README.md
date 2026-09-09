@@ -94,20 +94,49 @@ de la prueba. Una vez vencido ese plazo, no se recibirán nuevas entregas.
 
 ## Anotaciones del postulante
 
-Completa este espacio antes de entregar tu solución.
-
 ### Instrucciones de ejecución
 
-Indica los comandos necesarios para instalar las dependencias, configurar la base
-de datos, ejecutar el backend, ejecutar la interfaz y correr las pruebas. La
-solución debe poder levantarse siguiendo únicamente estas instrucciones.
+Para levantar la aplicación se necesitan dos terminales: una para el backend y otra para el frontend.
+
+#### 1. Backend (Django)
+
+# Instalar dependencias del proyecto
+uv sync
+
+# Correr migraciones
+uv run python manage.py migrate
+
+# Ejecutar los tests unitarios
+uv run python manage.py test tests
+
+# Levantar la API
+uv run python manage.py runserver
+```
+
+#### 2. Frontend (Next.js)
+
+# Instalar paquetes
+npm install
+
+# Iniciar en modo desarrollo
+npm run dev
+```
+
+---
 
 ### Decisiones y observaciones
 
-Describe brevemente cualquier decisión técnica relevante, supuesto, limitación o
-mejora pendiente.
+- **Uso de `uv` en el backend:** Opté por `uv` como gestor de paquetes de Python en lugar del clásico `pip + venv` tradicional. Es notablemente más rápido al instalar librerías y el archivo `uv.lock` asegura que el entorno sea idéntico al momento de evaluar la prueba.
+- **Estructura simple y modular:** Mantuve todo el dominio del catálogo dentro de una sola app de Django (`catalog`). Dado el tiempo y alcance de la prueba, crear múltiples apps habría sido sobreingeniería innecesaria.
+- **ViewSets y DRF:** Usé `ModelViewSet` para productos y categorías porque resuelve el CRUD estándar de manera muy limpia y testeable. Para los filtros integré `django-filter`, permitiendo filtrar por categoría (`?category=id`) y buscar por texto (`?search=texto`) sin ensuciar la lógica de las vistas.
+- **Modelos y tipos de datos:** Para el precio usé `DecimalField` en lugar de `FloatField` para evitar errores de redondeo que suelen ocurrir con números flotantes cuando se maneja dinero. Las validaciones de valores mayores o iguales a cero las reforcé tanto en el modelo (`MinValueValidator`) como en el serializer para devolver errores 400 descriptivos al cliente.
+- **Frontend con TanStack Query y TypeScript:** Decidí usar Next.js con TypeScript para tener tipado estricto en los modelos de producto y respuestas de la API. Incorporé TanStack Query (`@tanstack/react-query`) porque simplifica mucho el manejo de estados asíncronos (loading, error) y permite refrescar automáticamente la grilla al crear o eliminar un producto mediante la invalidación de queries.
+- **Mejoras pendientes:** Si contara con más tiempo, me gustaría agregar paginación en el backend (pensando en catálogos grandes), notificaciones tipo *toast* en la UI para confirmar acciones de guardado, y una suite de pruebas frontend usando Vitest o React Testing Library.
+
+---
 
 ### Herramientas de IA utilizadas
 
-Si utilizaste herramientas de IA, indica cuáles y para qué. Si no utilizaste
-ninguna, indícalo también.
+Se utilizó la herramienta Antigravity 2.0 con la IA de Gemini para gestionar el diseño de la UI del frontend. Se utilizó dentro del backend para apoyo en la creación de la arquitectura, se usó como apoyo para la resolución de errores de código y para finalmente realizar rápidamente la documentación del proyecto.
+
+Todo lo que esta herramienta de IA me propuso fue revisado y aplicado por mi mismo, manteniendo a la IA solo como un apoyo para la solución.
