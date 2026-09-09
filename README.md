@@ -111,7 +111,7 @@ uv run python manage.py test tests
 
 # Levantar la API
 uv run python manage.py runserver
-```
+
 
 #### 2. Frontend (Next.js)
 
